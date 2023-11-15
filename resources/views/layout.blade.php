@@ -14,36 +14,6 @@
 
 <body>
     <header>
-        <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Главная</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="about">О нас <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact">Контакты</a>
-                    </li>
-
-                </ul>
-            </div>
-            <div class="navbar-nav d-flex justify-content-end">
-                <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="signup" role="button">Вход</a>
-                </p>
-                <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="auth/login" role="button">Регистрация</a>
-                </p>
-            </div>
-        </nav>
-        Explain -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Navbar</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -61,6 +31,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact">Контакты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/article/show">Статьи</a>
                     </li>
                 </ul>
                 <div class="form-inline my-2 my-lg-0">

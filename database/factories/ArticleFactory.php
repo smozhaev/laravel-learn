@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+
 class ArticleFactory extends Factory
 {
     /**
@@ -14,7 +15,10 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'datePublic' => $this->faker->date(),
+            'title' => $this->faker->word(),
+            'shortDesc' => $this->faker->sentence(),
+            'desc' => $this->faker->text(),
         ];
     }
 }
