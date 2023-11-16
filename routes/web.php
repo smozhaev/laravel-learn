@@ -16,7 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('article/show', [ArticleController::class, 'index']);
+Route::resource('article', ArticleController::class);
+
+// Route::group(['prefix'=>'/article'], function(){
+//     Route::get('', [ArticleController::class, 'index']);
+//     Route::get('/create', [ArticleController::class, 'create']);
+//     Route::get('/store', [ArticleController::class, 'store']);
+//     Route::get('/action', [ArticleController::class, 'action']);
+// });
+
 Route::get('/signup', [AuthController::class, 'create']);
 Route::post('/auth/login', [AuthController::class, 'singUp']);
 Route::get('/', [MainController::class, 'index']);

@@ -33,7 +33,10 @@
                         <a class="nav-link" href="contact">Контакты</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/article/show">Статьи</a>
+                        <a class="nav-link" href="/article">Статьи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/article/create">Статьи создать</a>
                     </li>
                 </ul>
                 <div class="form-inline my-2 my-lg-0">
