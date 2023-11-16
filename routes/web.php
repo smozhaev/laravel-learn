@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('article', ArticleController::class);
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
 
 // Route::group(['prefix'=>'/article'], function(){
 //     Route::get('', [ArticleController::class, 'index']);
@@ -25,8 +25,20 @@ Route::resource('article', ArticleController::class);
 //     Route::get('/action', [ArticleController::class, 'action']);
 // });
 
-Route::get('/signup', [AuthController::class, 'create']);
-Route::post('/auth/login', [AuthController::class, 'singUp']);
+//Auth
+// Route::get('/auth/create', [AuthController::class, 'create']);
+// Route::post('/auth/signUp', [AuthController::class, 'signUp']);
+// Route::get('/auth/login', [AuthController::class, 'login'])->name('login');
+// Route::post('/auth/signIn', [AuthController::class, 'customLogin']);
+
+Route::post('/registr', [AuthController::class, 'registr']);
+Route::get('/create', [AuthController::class, 'create']);
+Route::get('/create', [AuthController::class, 'create']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/authenticate', [AuthController::class, 'authenticate']);
+Route::get('/logout', [AuthController::class, 'logout']);
+
+
 Route::get('/', [MainController::class, 'index']);
 Route::get('/galery/{full_image}', [MainController::class, 'show']);
 

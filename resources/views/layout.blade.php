@@ -40,12 +40,19 @@
                     </li>
                 </ul>
                 <div class="form-inline my-2 my-lg-0">
+                    @guest
                     <p class="lead" style="margin-right: 10px;">
-                        <a class="btn btn-primary btn-lg" href="signup" role="button">Вход</a>
+                        <a href="/create" class="btn btn-primary btn-lg" role="button">Регистрация</a>
                     </p>
-                    <p class="lead">
-                        <a class="btn btn-primary btn-lg" href="auth/login" role="button">Регистрация</a>
+                    <p class="lead" style="margin-right: 10px;">
+                        <a href="/login" class="btn btn-primary btn-lg" role="button">Войти</a>
                     </p>
+                    @endguest
+                    @auth
+                    <p class="lead" style="margin-right: 10px;">
+                        <a href="/logout" class="btn btn-primary btn-lg" role="button">Выйти</a>
+                    </p>
+                    @endauth
                 </div>
             </div>
         </nav>
