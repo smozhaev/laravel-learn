@@ -435,17 +435,26 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/article">Статьи</a>
                     </li>
+                    @can('article')
                     <li class="nav-item">
                         <a class="nav-link" href="/article/create">Статьи создать</a>
                     </li>
+                    @endcan
                 </ul>
                 <div class="form-inline my-2 my-lg-0">
+                    @guest
                     <p class="lead" style="margin-right: 10px;">
-                        <a class="btn btn-primary btn-lg" href="signup" role="button">Вход</a>
+                        <a class="btn btn-primary btn-lg" href="/login" role="button">Вход</a>
                     </p>
                     <p class="lead">
-                        <a class="btn btn-primary btn-lg" href="auth/login" role="button">Регистрация</a>
+                        <a class="btn btn-primary btn-lg" href="/create" role="button">Регистрация</a>
                     </p>
+                    @endguest
+                    @auth
+                    <p class="lead">
+                        <a class="btn btn-primary btn-lg" href="/logout" role="button">Выход</a>
+                    </p>
+                    @endauth
                 </div>
             </div>
         </nav>

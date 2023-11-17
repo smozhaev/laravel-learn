@@ -14,7 +14,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $article = Article::all();
+        $article = Article::latest()->paginate(5);
         return view('articles/article', ['articles' => $article]);
     }
 
@@ -25,6 +25,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', [self::class]);
         return view('articles/create');
     }
 
