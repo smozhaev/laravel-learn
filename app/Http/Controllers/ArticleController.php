@@ -62,7 +62,15 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        return view('articles/show', ['article' => $article]);
+
+        $article->load('user'); //Эта строка использует "ленивую" загрузку 
+        //(lazy loading) для получения данных пользователя, связанного
+        // со статьей.
+
+        return view('articles/show', [
+            'authorName' => $article->user->name,
+            'article' => $article,
+        ]);
     }
 
     /**

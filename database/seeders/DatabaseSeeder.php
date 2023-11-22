@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Article;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
-
+use App\Models\Comment;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,11 +18,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        // \App\Models\User::factory(10)->create();
-        Article::factory(20)->create();
+        // \App\Models\User::factory(30)->create();
+        Article::factory(50)->has(Comment::factory(3))->create();
+
         $this->call([
             // UserSeeder::class,
-            RoleSeeder::class,
+            // RoleSeeder::class,
+
         ]);
     }
 }
