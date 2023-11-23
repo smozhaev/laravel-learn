@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\VeryLongJob;
 use App\Models\Article;
 use Illuminate\Http\Request;
-
+use App\Models\Comment;
+use App\Models\User;
 
 class ArticleController extends Controller
 {
@@ -28,7 +29,9 @@ class ArticleController extends Controller
     public function create()
     {
         $this->authorize('create', [self::class]);
-        return view('articles/create');
+        $currentUserId = auth()->id();
+
+        return view('articles/create', ['currentUserId' => $currentUserId]);
     }
 
     /**
@@ -43,12 +46,15 @@ class ArticleController extends Controller
             'datePublic' => 'required',
             'title' => 'required',
             'desc' => 'required',
+            'article_id' => 'required',
+
         ]);
         $article = new Article;
         $article->datePublic = $request->datePublic;
         $article->title = $request->title;
         $article->shortDesc = $request->shortDesc;
         $article->desc = $request->desc;
+        $article->user_id = $request->article_id;
         $result = $article->save();
         if ($result) VeryLongJob::dispatch($article);
         return redirect(route('article.index'));
@@ -66,10 +72,12 @@ class ArticleController extends Controller
         $article->load('user'); //Эта строка использует "ленивую" загрузку 
         //(lazy loading) для получения данных пользователя, связанного
         // со статьей.
+        $comments = Comment::where('article_id', $article->id)->latest()->get();
 
         return view('articles/show', [
             'authorName' => $article->user->name,
             'article' => $article,
+            'comments' => $comments,
         ]);
     }
 
@@ -115,6 +123,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        Comment::where('article_id', $article->id)->delete();
         $article->delete();
         return redirect()->route('article.index');
     }

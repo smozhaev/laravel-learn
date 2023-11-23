@@ -4,7 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,7 +30,21 @@ Route::resource('article', ArticleController::class)->middleware('auth:sanctum')
 // Route::post('/auth/signUp', [AuthController::class, 'signUp']);
 // Route::get('/auth/login', [AuthController::class, 'login'])->name('login');
 // Route::post('/auth/signIn', [AuthController::class, 'customLogin']);
-
+// Route::prefix('/comment')->group(function () {
+//     Route::get('/all', [CommentController::class, 'index'])->middleware('path');
+//     Route::post('', [CommentController::class, 'store']);
+//     Route::get('/edit/{id}', [CommentController::class, 'edit']);
+//     Route::post('/update/{id}', [CommentController::class, 'update']);
+//     Route::get('/delete/{id}', [CommentController::class, 'delete']);
+//     Route::get('/accept/{id}', [CommentController::class, 'accept']);
+//     Route::get('/reject/{id}', [CommentController::class, 'reject']);
+// });
+Route::prefix('/comment')->group(function () {
+    Route::post('', [CommentController::class, 'store']);
+    Route::get('/edit/{id}', [CommentController::class, 'edit']);
+    Route::post('/update/{id}', [CommentController::class, 'update']);
+    Route::get('/delete/{id}', [CommentController::class, 'delete']);
+});
 Route::post('/registr', [AuthController::class, 'registr']);
 Route::get('/create', [AuthController::class, 'create']);
 Route::get('/create', [AuthController::class, 'create']);

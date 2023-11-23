@@ -42,9 +42,9 @@ class ArticleControllerPolicy
      */
     public function create(User $user)
     {
-        return $user->role_id == 1
+        return ($user->role_id == 1 || $user->role_id == 3)
             ? Response::allow()
-            : Response::deny("Ты не модератор");
+            : Response::deny("Ты не модератор или не автор");
     }
 
     /**

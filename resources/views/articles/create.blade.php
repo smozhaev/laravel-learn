@@ -20,6 +20,9 @@
         <label for="exampleInputPassword1">Содержание</label>
         <input name="desc" class="form-control" id="exampleInputPassword1" placeholder="Содержание">
     </div>
+    <div class="mb-3">
+        <input type="hidden" name="article_id" value="{{$currentUserId}}">
+    </div>
     <button type="submit" class="btn btn-primary">Отправить Статью</button>
 </form>
 @endsection
