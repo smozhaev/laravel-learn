@@ -10,13 +10,19 @@
 
     <p>{{$article->desc}}</p>
     <div class=" form-inline my-2 my-lg-0">
+        @can('update', $article)
         <a class="btn btn-primary btn-lg" style="margin-right: 10px;"
-            href="/article/{{$article->id}}/edit">Редактировать</a>
+            href="/article/{{$article->id}}/edit">Редактировать
+        </a>
+        @endcan
+        @can('delete', $article)
         <form class="lead" action="/article/{{$article->id}}" method="post">
             @method('DELETE')
             @csrf
             <button class="btn btn-primary btn-lg" style="margin-right: 10px;" type="submit">Удалить</button>
         </form>
+        @endcan
+
     </div>
     <div style="
         margin-top: 50px;
@@ -38,12 +44,21 @@
         @foreach($comments as $comment)
         <div class="card mt-3" style=" background-color: #e9ecef">
             <div class="card-body">
-                <h5 class="card-title">{{$comment->title}}</h5>
+                <div class="d-flex flex-row justify-content-between">
+                    <h5><a href="#"> {{$comment->author->name}}</a></h5>
+                    <p>{{$comment->updated_at}}</p>
+                </div>
+
+                <h6 class="card-title">{{$comment->title}}</h6>
                 <p class="card-text">{{$comment->text}}</p>
                 <div class="btn-group">
-                    <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Update comment</a>
-                    <a href="/comment/delete/{{$comment->id}}" class="btn btn-primary mr-3">Delete comment</a>
-                    <a> {{$comment->author->name}}</a>
+                    @can('update', $comment)
+                    <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Изменить коментарий</a>
+                    @endcan
+                    @can('delete', $comment)
+                    <a href="/comment/delete/{{$comment->id}}" class="btn btn-primary mr-3">Удалить Коментарий</a>
+                    @endcan
+
                 </div>
             </div>
         </div>

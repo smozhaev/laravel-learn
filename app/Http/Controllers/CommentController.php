@@ -20,7 +20,7 @@ class CommentController extends Controller
         $comment->article_id = $request->article_id;
         $comment->user_id = auth()->id();
         $comment->save();
-        $comment->load('user');
+        $comment->load('author');
         return redirect()->route('article.show', [
             'article' => $request->article_id,
 
@@ -34,6 +34,7 @@ class CommentController extends Controller
     }
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'text' => 'required'
         ]);
@@ -42,11 +43,13 @@ class CommentController extends Controller
         $comment->title = $request->title;
         $comment->text = $request->text;
         $comment->save();
+        $this->authorize('update', $comment);
         return redirect()->route('article.show', ['article' => $request->article_id]);
     }
     public function delete($id)
     {
         $comment = Comment::findOrFail($id);
+        $this->authorize('delete', $comment);
         $comment->delete();
         // $comment = NULL;
         return redirect()->route('article.show', ['article' => $comment->article_id]);

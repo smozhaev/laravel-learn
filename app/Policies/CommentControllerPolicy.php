@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Article;
+use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
-class ArticleControllerPolicy
+class CommentControllerPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class ArticleControllerPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Article  $article
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Article $article)
+    public function view(User $user, Comment $comment)
     {
         //
     }
@@ -42,47 +42,45 @@ class ArticleControllerPolicy
      */
     public function create(User $user)
     {
-        return ($user->role_id == 1 || $user->role_id == 3)
-            ? Response::allow()
-            : Response::deny("Ты не модератор или не автор");
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Article  $article
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Article $article)
+    public function update(User $user, Comment $comment)
     {
-        return ($user->id === $article->user_id || $user->role_id == 1)
+        return ($user->id === $comment->user_id || $user->role_id == 1)
             ? Response::allow()
-            : Response::deny("Ты не автор статьи");
+            : Response::deny("Ты не автор комментария или не модератор у тебя нету права исправлять комментарий");
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Article  $article
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Article $article)
+    public function delete(User $user, Comment $comment)
     {
-        return ($user->id === $article->user_id || $user->role_id == 1)
+        return ($user->id === $comment->user_id || $user->role_id == 1)
             ? Response::allow()
-            : Response::deny("Ты не автор статьи или не модератор у тебя нету права удалять статью");
+            : Response::deny("Ты не автор комментария или не модератор у тебя нету права удалять комментарий");
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Article  $article
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Article $article)
+    public function restore(User $user, Comment $comment)
     {
         //
     }
@@ -91,10 +89,10 @@ class ArticleControllerPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Article  $article
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Article $article)
+    public function forceDelete(User $user, Comment $comment)
     {
         //
     }

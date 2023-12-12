@@ -92,6 +92,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+
         return view('articles/edit', ['article' => $article]);
     }
 
@@ -104,6 +105,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
+        $this->authorize('update', $article);
         $request->validate([
             'datePublic' => 'required',
             'title' => 'required',
@@ -126,6 +128,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        $this->authorize('delete', $article);
         Comment::where('article_id', $article->id)->delete();
         $article->delete();
         return redirect()->route('article.index');
