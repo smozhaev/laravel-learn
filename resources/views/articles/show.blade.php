@@ -10,52 +10,69 @@
 
     <p>{{$article->desc}}</p>
     <div class=" form-inline my-2 my-lg-0">
-        <a class="btn btn-primary btn-lg" style="margin-right: 10px;" href="/article/{{$article->id}}/edit">Редактировать</a>
+        <a class="btn btn-primary btn-lg" style="margin-right: 10px;"
+            href="/article/{{$article->id}}/edit">Редактировать</a>
         <form class="lead" action="/article/{{$article->id}}" method="post">
             @method('DELETE')
             @csrf
             <button class="btn btn-primary btn-lg" style="margin-right: 10px;" type="submit">Удалить</button>
         </form>
     </div>
-    <h3 class="mt-3">Comments</h3>
-    <div class="alert-danger">
-        @if ($errors->any())
-        @foreach($errors->all() as $error)
-        <ul>
-            <li>{{$error}}</li>
-        </ul>
-        @endforeach
-        @endif
-    </div>
-    <form action="/comment" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="exampleInputTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" id="exampleInputTitle" name="title">
+    <div style="
+        margin-top: 50px;
+        padding: 15px;
+        width: 75%;
+        border-radius: 20px;
+        background-color: white;
+    ">
+        <h3 class="mt-3">Коментарии</h3>
+        <div class="alert-danger">
+            @if ($errors->any())
+            @foreach($errors->all() as $error)
+            <ul>
+                <li>{{$error}}</li>
+            </ul>
+            @endforeach
+            @endif
         </div>
-        <div class="mb-3">
-            <label for="exampleInputText" class="form-label">Text</label>
-            <input type="text" class="form-control" id="exampleInputText" name="text">
-        </div>
-        <div class="mb-3">
-            <input type="hidden" name="article_id" value="{{$article->id}}">
-        </div>
-        <button type="submit" class="btn btn-primary">Add comment</button>
-    </form>
-    @foreach($comments as $comment)
-    <div class="card mt-3" style="width: 50%;">
-        <div class="card-body">
-            <h5 class="card-title">{{$comment->title}}</h5>
-            <p class="card-text">{{$comment->text}}</p>
-            <div class="btn-group">
-                <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Update comment</a>
-                <a href="/comment/delete/{{$comment->id}}" class="btn btn-primary mr-3">Delete comment</a>
-                <a> {{$comment->author->name}}</a>
+        @foreach($comments as $comment)
+        <div class="card mt-3" style=" background-color: #e9ecef">
+            <div class="card-body">
+                <h5 class="card-title">{{$comment->title}}</h5>
+                <p class="card-text">{{$comment->text}}</p>
+                <div class="btn-group">
+                    <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Update comment</a>
+                    <a href="/comment/delete/{{$comment->id}}" class="btn btn-primary mr-3">Delete comment</a>
+                    <a> {{$comment->author->name}}</a>
+                </div>
             </div>
         </div>
-    </div>
-    @endforeach
+        @endforeach
+        <form action="/comment" method="POST" style="
+            margin-top: 50px;
+            padding: 15px;
+            max-width: 900px;
+            
+            border-radius: 20px;
+            background-color: #e9ecef;
+        ">
+            @csrf
+            <h3>Добавте коментарий</h3>
+            <div class="mb-3">
+                <label for="exampleInputTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="exampleInputTitle" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputText" class="form-label">Text</label>
+                <input type="text" class="form-control" id="exampleInputText" name="text">
+            </div>
+            <div class="mb-3">
+                <input type="hidden" name="article_id" value="{{$article->id}}">
+            </div>
+            <button type="submit" class="btn btn-primary">Add comment</button>
+        </form>
 
+    </div>
 
 
     <!-- <p class="lead">
