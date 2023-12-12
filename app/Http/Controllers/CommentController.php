@@ -20,7 +20,11 @@ class CommentController extends Controller
         $comment->article_id = $request->article_id;
         $comment->user_id = auth()->id();
         $comment->save();
-        return redirect()->route('article.show', ['article' => $request->article_id]);
+        $comment->load('user');
+        return redirect()->route('article.show', [
+            'article' => $request->article_id,
+
+        ]);
     }
 
     public function edit($id)

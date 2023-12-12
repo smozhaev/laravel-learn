@@ -10,8 +10,7 @@
 
     <p>{{$article->desc}}</p>
     <div class=" form-inline my-2 my-lg-0">
-        <a class="btn btn-primary btn-lg" style="margin-right: 10px;"
-            href="/article/{{$article->id}}/edit">Редактировать</a>
+        <a class="btn btn-primary btn-lg" style="margin-right: 10px;" href="/article/{{$article->id}}/edit">Редактировать</a>
         <form class="lead" action="/article/{{$article->id}}" method="post">
             @method('DELETE')
             @csrf
@@ -51,6 +50,7 @@
             <div class="btn-group">
                 <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Update comment</a>
                 <a href="/comment/delete/{{$comment->id}}" class="btn btn-primary mr-3">Delete comment</a>
+                <a> {{$comment->author->name}}</a>
             </div>
         </div>
     </div>

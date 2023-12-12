@@ -72,7 +72,10 @@ class ArticleController extends Controller
         $article->load('user'); //Эта строка использует "ленивую" загрузку 
         //(lazy loading) для получения данных пользователя, связанного
         // со статьей.
-        $comments = Comment::where('article_id', $article->id)->latest()->get();
+        $comments = Comment::with('author')
+            ->where('article_id', $article->id)
+            ->latest()
+            ->get();
 
         return view('articles/show', [
             'authorName' => $article->user->name,
