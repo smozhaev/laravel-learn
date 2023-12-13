@@ -17,6 +17,7 @@ class CommentFactory extends Factory
             'title' => $this->faker->sentence(),
             'text' => $this->faker->text(),
             'user_id' => $this->faker->numberBetween(1, 23),
+            'is_moderated' => true,
         ];
     }
 }

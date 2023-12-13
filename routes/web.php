@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +17,7 @@ use App\Http\Controllers\CommentController;
 |
 */
 
-Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
+
 
 // Route::group(['prefix'=>'/article'], function(){
 //     Route::get('', [ArticleController::class, 'index']);
@@ -39,6 +40,11 @@ Route::resource('article', ArticleController::class)->middleware('auth:sanctum')
 //     Route::get('/accept/{id}', [CommentController::class, 'accept']);
 //     Route::get('/reject/{id}', [CommentController::class, 'reject']);
 // });
+
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
+
+Route::resource('user', UserController::class)->middleware('auth:sanctum');
+
 Route::prefix('/comment')->group(function () {
     Route::post('', [CommentController::class, 'store']);
     Route::get('/edit/{id}', [CommentController::class, 'edit']);

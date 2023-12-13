@@ -19,11 +19,14 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:App\Models\User, email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'author_desc' => 'required',
         ]);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'author_desc' => $request->author_desc,
+            'role_id' => 2,
             'password' => Hash::make($request->password),
         ]);
         $user->createToken('MyAppTokens')->plainTextToken;

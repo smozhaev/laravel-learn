@@ -15,6 +15,7 @@ class AddRoleUser extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id')->add()->nullable();
+            $table->string('author_desc');
         });
     }
 

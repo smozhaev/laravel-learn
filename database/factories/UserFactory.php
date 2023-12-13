@@ -21,6 +21,7 @@ class UserFactory extends Factory
             'password' => '123456789', // password
             'remember_token' => Str::random(10),
             'role_id' => 2,
+            'author_desc' => $this->faker->text(),
         ];
     }
 

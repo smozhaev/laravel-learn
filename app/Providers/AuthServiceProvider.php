@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('article', function (User $user) {
-            return $user->role_id == 1
+            return ($user->role_id == 1 || $user->role_id == 3)
                 ? Response::allow()
                 : Response::deny('You don`t moderator');
         });

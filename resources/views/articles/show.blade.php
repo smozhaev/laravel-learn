@@ -4,7 +4,7 @@
     <h1 class="display-4">{{$article->title}}</h1>
     <div style="display:flex; flex-direction:row; justify-content:space-between; margin: 20px 0px 20px 0px;">
         <p class="lead">{{$article->shortDesc}}</p>
-        <a href="#" style="margin-right:clamp(0px,1vw,20px);">{{$authorName}}</a>
+        <a href="/user/{{$article->user_id}}" style="margin-right:clamp(0px,1vw,20px);">{{$authorName}}</a>
     </div>
 
 

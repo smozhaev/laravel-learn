@@ -25,6 +25,10 @@
         <label for="exampleInputPassword1" class="form-label">Пароль</label>
         <input type="password" class="form-control" id="exampleInputPassword1" name="password">
     </div>
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">Добавте информацию о себе</label>
+        <input type="text" class="form-control" id="exampleInputName" name="author_desc">
+    </div>
 
     <button type="submit" class="btn btn-primary">Зарегестрироваться</button>
 </form>

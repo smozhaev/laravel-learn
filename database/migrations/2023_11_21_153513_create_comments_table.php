@@ -22,6 +22,7 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('text');
+            $table->boolean('is_moderated')->default(false);
             $table->unsignedBigInteger('user_id'); // Внешний ключ для пользователя
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('article_id'); // Внешний ключ для статьи
