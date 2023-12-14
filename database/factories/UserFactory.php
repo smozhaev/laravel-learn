@@ -20,7 +20,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '123456789', // password
             'remember_token' => Str::random(10),
-            'role_id' => 3,
+            'role_id' => 2,
             'author_desc' => $this->faker->text(),
         ];
     }

@@ -435,6 +435,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/article">Статьи</a>
                     </li>
+
                     @can('article')
                     <li class="nav-item">
                         <a class="nav-link" href="/article/create">Статьи создать</a>
@@ -445,6 +446,22 @@
                         <a class="nav-link" href="/moderate/">Мдерировать коментарии</a>
                     </li>
                     @endcan
+
+                    @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Уведомлени:{{ auth()->user()->unreadNotifications->count() }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @foreach (auth()->user()->unreadNotifications as $notification)
+                            <a class="dropdown-item" href="/article/{{$notification->data['article_id']}}">
+                                {{ $notification->data['message'] }}
+                            </a>
+                            @endforeach
+                        </div>
+                    </li>
+                    @endauth
                 </ul>
                 <div class="form-inline my-2 my-lg-0">
                     @guest
@@ -460,6 +477,7 @@
                         <a class="btn btn-primary btn-lg" href="/logout" role="button">Выход</a>
                     </p>
                     @endauth
+
                 </div>
             </div>
         </nav>

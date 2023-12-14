@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\ArticleCreatedNotification;
+use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
@@ -33,8 +35,8 @@ class ArticleController extends Controller
             'title' => 'required',
             'desc' => 'required',
             'article_id' => 'required',
-
         ]);
+
         $article = new Article;
         $article->datePublic = $request->datePublic;
         $article->title = $request->title;
@@ -42,7 +44,13 @@ class ArticleController extends Controller
         $article->desc = $request->desc;
         $article->user_id = $request->article_id;
         $result = $article->save();
+
         if ($result) VeryLongJob::dispatch($article);
+        if ($article) {
+            $users = User::where('id', '!=', auth()->id())->get();
+            Notification::send($users, new ArticleCreatedNotification($article));
+        }
+
         return redirect(route('article.index'));
     }
 
@@ -52,11 +60,18 @@ class ArticleController extends Controller
         $article->load('user'); //Эта строка использует "ленивую" загрузку 
         //(lazy loading) для получения данных пользователя, связанного
         // со статьей.
+
         $comments = Comment::with('author')
             ->where('article_id', $article->id)
             ->where('is_moderated', true)
             ->latest()
             ->get();
+
+        // Отметка уведомлений о комментариях к этой статье как прочитанных
+        auth()->user()->unreadNotifications()
+            ->where('data->article_id', $article->id)
+            ->get()
+            ->markAsRead();
 
         return view('articles/show', [
             'authorName' => $article->user->name,
