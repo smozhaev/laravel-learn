@@ -45,7 +45,7 @@
         <div class="card mt-3" style=" background-color: #e9ecef">
             <div class="card-body">
                 <div class="d-flex flex-row justify-content-between">
-                    <h5><a href="#"> {{$comment->author->name}}</a></h5>
+                    <h5><a href="/user/{{$comment->user_id}}"> {{$comment->author->name}}</a></h5>
                     <p>{{$comment->updated_at}}</p>
                 </div>
 
@@ -63,6 +63,11 @@
             </div>
         </div>
         @endforeach
+        @if (session('message'))
+        <div class="alert alert-info">
+            {{ session('message') }}
+        </div>
+        @endif
         <form action="/comment" method="POST" style="
             margin-top: 50px;
             padding: 15px;
@@ -85,6 +90,7 @@
                 <input type="hidden" name="article_id" value="{{$article->id}}">
             </div>
             <button type="submit" class="btn btn-primary">Add comment</button>
+
         </form>
 
     </div>

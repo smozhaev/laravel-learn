@@ -427,10 +427,10 @@
                         <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about">О нас </a>
+                        <a class="nav-link" href="/about">О нас </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact">Контакты</a>
+                        <a class="nav-link" href="/contact">Контакты</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/article">Статьи</a>
@@ -438,6 +438,11 @@
                     @can('article')
                     <li class="nav-item">
                         <a class="nav-link" href="/article/create">Статьи создать</a>
+                    </li>
+                    @endcan
+                    @can('moderator')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/moderate/">Мдерировать коментарии</a>
                     </li>
                     @endcan
                 </ul>

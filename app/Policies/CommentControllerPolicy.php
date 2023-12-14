@@ -59,6 +59,13 @@ class CommentControllerPolicy
             : Response::deny("Ты не автор комментария или не модератор у тебя нету права исправлять комментарий");
     }
 
+    public function moderate(User $user, Comment $comment)
+    {
+        return ($user->role_id == 1)
+            ? Response::allow()
+            : Response::deny("Ты не модератор");
+    }
+
     /**
      * Determine whether the user can delete the model.
      *

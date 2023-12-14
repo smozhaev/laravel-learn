@@ -4,10 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
+
+    public function index()
+    {
+        $comments = Comment::where('is_moderated', false)->latest()->paginate(5);
+
+        return view('moderates/moderate', ['comments' => $comments]);
+    }
+
+
+
+    public function approve(Comment $comment)
+    {
+
+        $comment->is_moderated = true;
+        $comment->save();
+        return back();
+    }
+
+    public function disapprove(Comment $comment)
+    {
+
+        $comment->is_moderated = false;
+        $comment->delete();
+
+        return back();
+    }
+
+
     public function store(Request $request)
     {
         $request->validate([
@@ -21,6 +49,7 @@ class CommentController extends Controller
         $comment->user_id = auth()->id();
         $comment->save();
         $comment->load('author');
+        session()->flash('message', 'Ваш комментарий добавлен и ожидает модерации.');
         return redirect()->route('article.show', [
             'article' => $request->article_id,
 
@@ -43,81 +72,14 @@ class CommentController extends Controller
         $comment->title = $request->title;
         $comment->text = $request->text;
         $comment->save();
-        $this->authorize('update', $comment);
+        Gate::authorize('update', $comment);
         return redirect()->route('article.show', ['article' => $request->article_id]);
     }
     public function delete($id)
     {
         $comment = Comment::findOrFail($id);
-        $this->authorize('delete', $comment);
+        Gate::authorize('delete', $comment);
         $comment->delete();
-        // $comment = NULL;
         return redirect()->route('article.show', ['article' => $comment->article_id]);
     }
-
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    // }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Comment  $comment
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Comment $comment)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  \App\Models\Comment  $comment
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit(Comment $comment)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  \App\Models\Comment  $comment
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, Comment $comment)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Comment  $comment
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Comment $comment)
-    // {
-    //     //
-    // }
 }

@@ -35,5 +35,11 @@ class AuthServiceProvider extends ServiceProvider
                 ? Response::allow()
                 : Response::deny('You don`t moderator');
         });
+
+        Gate::define('moderator', function (User $user) {
+            return ($user->role_id == 1)
+                ? Response::allow()
+                : Response::deny('You don`t moderator');
+        });
     }
 }
