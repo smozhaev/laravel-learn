@@ -2,26 +2,26 @@
 export default {
     data() { return { msg: null } },
     created() {
-        window.Echo.channel('my-channel').listen('ArticleCreateEvent', (name) => {
-            console.log(name);
-            this.msg = name.name;
+        window.Echo.channel('test').listen('EventNewArticle', (name) => {
+            this.msg = name.article.title;
             alert('Добавлена новая статья!');
         })
+        console.log("xd");
     }
+
 }
 </script>
 
 
 <template>
-    <div v-if="msg" class="alert">
-        <span>{{ msg }}</span>
-        <button @click="closeAlert">Закрыть</button>
+    <div v-show="this.msg != null" class="alert alert-primary" role="alert">
+        Добавлена новая статья <strong>{{ this.msg }}</strong>
     </div>
 </template>
 
 
 <style scoped>
-.alert {
+/* .alert {
     position: fixed;
     top: 20px;
     left: 50%;
@@ -41,6 +41,6 @@ export default {
     cursor: pointer;
     font-size: 16px;
     margin-left: 15px;
-}
+} */
 </style>
 

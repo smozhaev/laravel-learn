@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use App\Notifications\ArticleCreatedNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Events\EventNewArticle;
 
 class ArticleController extends Controller
 {
@@ -45,10 +46,13 @@ class ArticleController extends Controller
         $article->user_id = $request->article_id;
         $result = $article->save();
 
-        if ($result) VeryLongJob::dispatch($article);
-        if ($article) {
+
+
+        if ($result) {
             $users = User::where('id', '!=', auth()->id())->get();
             Notification::send($users, new ArticleCreatedNotification($article));
+            EventNewArticle::dispatch($article);
+            // VeryLongJob::dispatch($article);
         }
 
         return redirect(route('article.index'));
