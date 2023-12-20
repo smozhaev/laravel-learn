@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use App\Models\User;
+use App\Notifications\NotifyNewArticle;
 
 class CommentController extends Controller
 {
@@ -22,7 +28,13 @@ class CommentController extends Controller
     {
 
         $comment->is_moderated = true;
-        $comment->save();
+        $res = $comment->save();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', ['key' => 'commentAll:article*[0-9]/*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
         return back();
     }
 
@@ -30,7 +42,13 @@ class CommentController extends Controller
     {
 
         $comment->is_moderated = false;
-        $comment->delete();
+        $res = $comment->delete();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', ['key' => 'commentAll:article*[0-9]/*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
 
         return back();
     }
@@ -47,7 +65,15 @@ class CommentController extends Controller
         $comment->text = $request->text;
         $comment->article_id = $request->article_id;
         $comment->user_id = auth()->id();
-        $comment->save();
+        $res = $comment->save();
+
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', ['key' => 'commentAll:article*[0-9]/*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
+
         $comment->load('author');
         session()->flash('message', 'Ваш комментарий добавлен и ожидает модерации.');
         return redirect()->route('article.show', [
@@ -56,11 +82,14 @@ class CommentController extends Controller
         ]);
     }
 
+
     public function edit($id)
     {
         $comment = Comment::findOrFail($id);
         return view('comment.edit', ['comment' => $comment]);
     }
+
+
     public function update(Request $request, $id)
     {
 
@@ -71,15 +100,29 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         $comment->title = $request->title;
         $comment->text = $request->text;
-        $comment->save();
+        $res = $comment->save();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', ['key' => 'commentAll:article*[0-9]/*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
         Gate::authorize('update', $comment);
         return redirect()->route('article.show', ['article' => $request->article_id]);
     }
+
+
     public function delete($id)
     {
         $comment = Comment::findOrFail($id);
         Gate::authorize('delete', $comment);
-        $comment->delete();
+        $res = $comment->delete();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', ['key' => 'commentAll:article*[0-9]/*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
         return redirect()->route('article.show', ['article' => $comment->article_id]);
     }
 }

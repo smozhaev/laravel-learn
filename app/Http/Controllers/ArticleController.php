@@ -11,13 +11,23 @@ use Illuminate\Support\Facades\Gate;
 use App\Notifications\ArticleCreatedNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Events\EventNewArticle;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class ArticleController extends Controller
 {
 
     public function index()
     {
-        $article = Article::latest()->paginate(5);
+
+        $currentPage = request('page') ? request('page') : 1;
+        $article = Cache::remember('articleAll:' . $currentPage, 60, function () {
+            return Article::latest()->paginate(10);
+        });
+
+        // $article = Article::latest()->paginate(5);
         return view('articles/article', ['articles' => $article]);
     }
 
@@ -53,6 +63,10 @@ class ArticleController extends Controller
             Notification::send($users, new ArticleCreatedNotification($article));
             EventNewArticle::dispatch($article);
             // VeryLongJob::dispatch($article);
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', [':key' => 'articleAll:*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
         }
 
         return redirect(route('article.index'));
@@ -60,16 +74,20 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
+        $currentPage = request('page') ? request('page') : 1;
+        $article->load('user');
 
-        $article->load('user'); //Эта строка использует "ленивую" загрузку 
-        //(lazy loading) для получения данных пользователя, связанного
-        // со статьей.
 
-        $comments = Comment::with('author')
-            ->where('article_id', $article->id)
-            ->where('is_moderated', true)
-            ->latest()
-            ->get();
+
+
+
+        $comments = Cache::rememberForever('commentAll:article' . $article->id . '/' . $currentPage, function () use ($article) {
+            return Comment::with('author')
+                ->where('article_id', $article->id)
+                ->where('is_moderated', true)
+                ->latest()
+                ->get();
+        });
 
         // Отметка уведомлений о комментариях к этой статье как прочитанных
         auth()->user()->unreadNotifications()
@@ -103,7 +121,13 @@ class ArticleController extends Controller
         $article->title = $request->title;
         $article->shortDesc = $request->shortDesc;
         $article->desc = $request->desc;
-        $article->save();
+        $res = $article->save();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', [':key' => 'articleAll:*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
         return redirect(route('article.show', ['article' => $article->id]));
     }
 
@@ -111,7 +135,13 @@ class ArticleController extends Controller
     {
         Gate::authorize('delete', $article);
         Comment::where('article_id', $article->id)->delete();
-        $article->delete();
+        $res = $article->delete();
+        if ($res) {
+            $keys = DB::table('cache')->whereRaw('`key` GLOB :key', [':key' => 'articleAll:*[0-9]'])->get();
+            foreach ($keys as $key) {
+                Cache::forget($key->key);
+            }
+        }
         return redirect()->route('article.index');
     }
 }
