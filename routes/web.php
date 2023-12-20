@@ -8,12 +8,13 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 
 
-Route::resource('article', ArticleController::class)->middleware('auth:sanctum');
+Route::resource('article', ArticleController::class)->middleware('auth:sanctum')->middleware('auth:sanctum');
+Route::get('article/{article}', [ArticleController::class, 'show'])->middleware('path', 'auth:sanctum')->name('article.show');
 
 Route::resource('user', UserController::class)->middleware('auth:sanctum');
 
 Route::prefix('/comment')->middleware('auth:sanctum')->group(function () {
-    Route::post('', [CommentController::class, 'store']);
+    Route::post('', [CommentController::class, 'store'])->middleware('path');
     Route::get('/edit/{id}', [CommentController::class, 'edit']);
     Route::post('/update/{id}', [CommentController::class, 'update']);
     Route::get('/delete/{id}', [CommentController::class, 'delete']);
